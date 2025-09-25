@@ -226,7 +226,7 @@ app.layout = dbc.Container(
             dbc.Col([
                 html.Label("Actualizar"),
                 dcc.Interval(id="interval-refresh", 
-                             interval=36000000,  # 10 horas en ms
+                             interval=3600000, # 1 hora en ms
                              n_intervals=0
                             ),  
                 dbc.Button("Actualizar ahora", 
@@ -376,5 +376,3 @@ def actualizar(_, __, placas_sel, start_date, end_date):
 if __name__ == "__main__":
     # Para desarrollo local
     app.run_server(host="0.0.0.0", port=int(os.getenv("PORT", 8050)), debug=True)
-
-    
