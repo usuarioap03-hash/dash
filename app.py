@@ -9,8 +9,8 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import SQLAlchemyError, OperationalError
 
-import dash
-from dash import Dash, dcc, html, dash_table, Input, Output, State
+import app
+from app import Dash, dcc, html, dash_table, Input, Output, State
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
@@ -173,7 +173,7 @@ def cargar_datos() -> pd.DataFrame:
 #   App Dash (responsive)
 # =========================
 external_stylesheets = [dbc.themes.BOOTSTRAP]
-app: Dash = dash.Dash(__name__, external_stylesheets=external_stylesheets, title="QRLogix Dashboard")
+app: Dash = app.Dash(__name__, external_stylesheets=external_stylesheets, title="QRLogix Dashboard")
 server = app.server  # para gunicorn
 
 # Carga inicial
@@ -225,8 +225,15 @@ app.layout = dbc.Container(
             ], md=5),
             dbc.Col([
                 html.Label("Actualizar"),
-                dcc.Interval(id="interval-refresh", interval=60_000, n_intervals=0),  # cada 60s
-                dbc.Button("Actualizar ahora", id="btn-refresh", color="secondary", className="w-100")
+                dcc.Interval(id="interval-refresh", 
+                             interval=36000000,  # 10 horas en ms
+                             n_intervals=0
+                            ),  
+                dbc.Button("Actualizar ahora", 
+                            id="btn-refresh", 
+                            color="secondary", 
+                            className="w-100"
+                           )
             ], md=3),
         ], className="gy-3"),
         html.Br(),
@@ -369,3 +376,5 @@ def actualizar(_, __, placas_sel, start_date, end_date):
 if __name__ == "__main__":
     # Para desarrollo local
     app.run_server(host="0.0.0.0", port=int(os.getenv("PORT", 8050)), debug=True)
+
+    
