@@ -228,8 +228,14 @@ app.layout = dbc.Container(
             ], md=5),
             dbc.Col([
                 html.Label("Actualizar"),
-                dcc.Interval(id="interval-refresh", interval=60_000, n_intervals=0),  # cada 60s
-                dbc.Button("Actualizar ahora", id="btn-refresh", color="secondary", className="w-100")
+                dcc.Interval(
+                    id="interval-refresh", 
+                    interval=840000, 
+                    n_intervals=0),  # 14 minutos
+                dbc.Button("Actualizar ahora", 
+                           id="btn-refresh", 
+                           color="secondary", 
+                           className="w-100")
             ], md=3),
         ], className="gy-3"),
         html.Br(),
@@ -249,7 +255,10 @@ app.layout = dbc.Container(
                 dbc.Card(
                     dbc.CardBody([
                         html.H5("Tiempos por punto (promedio)", className="card-title"),
-                        dcc.Graph(id="grafico-puntos")
+                        dcc.Graph(
+                                id="grafico-puntos",
+                                style={"height": "380px"}                    # altura fija
+                                )           
                     ]),
                     className="shadow-sm rounded-3 h-100"
                 )
