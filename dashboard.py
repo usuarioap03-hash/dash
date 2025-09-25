@@ -9,8 +9,8 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import SQLAlchemyError, OperationalError
 
-import app
-from app import Dash, dcc, html, dash_table, Input, Output, State
+import dashboard
+from dashboard import Dash, dcc, html, dash_table, Input, Output, State
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
@@ -173,8 +173,8 @@ def cargar_datos() -> pd.DataFrame:
 #   App Dash (responsive)
 # =========================
 external_stylesheets = [dbc.themes.BOOTSTRAP]
-app: Dash = app.Dash(__name__, external_stylesheets=external_stylesheets, title="QRLogix Dashboard")
-server = app.server  # para gunicorn
+dashboard: Dash = dashboard.Dash(__name__, external_stylesheets=external_stylesheets, title="QRLogix Dashboard")
+server = dashboard.server  # para gunicorn
 
 # Carga inicial
 df0 = cargar_datos()
@@ -193,7 +193,7 @@ placas_opts = sorted([p for p in df0["placa"].dropna().unique()]) if "placa" in 
 min_fecha = df0["fecha"].min() if "fecha" in df0.columns and not df0.empty else None
 max_fecha = df0["fecha"].max() if "fecha" in df0.columns and not df0.empty else None
 
-app.layout = dbc.Container(
+dashboard.layout = dbc.Container(
     fluid=True,
     children=[
         html.Br(),
@@ -282,7 +282,7 @@ app.layout = dbc.Container(
 # =========================
 # Callbacks
 # =========================
-@app.callback(
+@dashboard.callback(
     Output("last-update", "children"),
     Output("kpi-ciclos", "children"),
     Output("kpi-escaneos", "children"),
@@ -375,4 +375,4 @@ def actualizar(_, __, placas_sel, start_date, end_date):
 
 if __name__ == "__main__":
     # Para desarrollo local
-    app.run_server(host="0.0.0.0", port=int(os.getenv("PORT", 8050)), debug=True)
+    dashboard.run_server(host="0.0.0.0", port=int(os.getenv("PORT", 8050)), debug=True)
