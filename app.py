@@ -43,10 +43,13 @@ def _parse_fecha(fecha_col: pd.Series) -> pd.Series:
     """
     Convierte una columna de fecha (posible texto 'DD-MM-YYYY' u otros) a datetime (fecha).
     """
-    # dayfirst=True por si viene 'DD-MM-YYYY'
     out = pd.to_datetime(fecha_col, errors="coerce", dayfirst=True)
-    # Mantener solo fecha (normalizada)
-    return out.dt.tz_localize(PANAMA_TZ, nonexistent='NaT', ambiguous='NaT', errors='coerce').dt.date
+    try:
+        # Localizar a Panamá y devolver solo fecha
+        return out.dt.tz_localize(PANAMA_TZ, nonexistent='NaT', ambiguous='NaT').dt.date
+    except Exception:
+        # Si ya estaba localizado o hay error, devolver solo la fecha
+        return out.dt.date
 
 
 def _parse_hora(h: pd.Series) -> pd.Series:
