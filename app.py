@@ -185,7 +185,7 @@ df0 = cargar_datos()
 def kpi_card(title, value, id_value=None):
     return dbc.Card(
         dbc.CardBody([
-            html.div(title, className="text-muted small"),
+            html.Div(title, className="text-muted small"),
             html.H4(id=id_value) if id_value else html.H4(value)
         ]),
         className="shadow-sm rounded-3"
